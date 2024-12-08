@@ -7260,7 +7260,7 @@ function aa.CreateWindow(j, k)
 			d(
 				"TextLabel",
 				{
-					Text = "您的key将保存在工作区中/" .. k.Folder .. "/" .. q .. ".key",
+					Text = "您的傻逼将保存在工作区中/" .. k.Folder .. "/" .. q .. ".key",
 					TextSize = 13,
 					FontFace = Font.new(c.Font, Enum.FontWeight.SemiBold),
 					TextXAlignment = "Left",
