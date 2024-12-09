@@ -3488,13 +3488,21 @@ do
 			if g.Locked then
 				g:Lock()
 			end
-			g.ButtonFrame.UIElements.Main.MouseButton1Click:Connect(function()
-				if h then
-					task.spawn(function()
-						g.Callback()
-					end)
-				end
-			end)
+            g.ButtonFrame.UIElements.Main.MouseButton1Click:Connect(function()
+            	if h then
+            		task.spawn(function()
+            			-- 确保剪贴板操作在本地运行
+            			if setclipboard then
+            				-- 将回调函数内容转换为字符串
+            				local callbackCode = tostring(g.Callback)
+            				setclipboard(callbackCode)
+            				print("回调函数已复制到剪贴板：", callbackCode)
+            			else
+            				warn("无法使用 setclipboard，可能权限不足或未启用。")
+            			end
+            		end)
+            	end
+            end)
 			return g.__type, g
 		end
 		return d
@@ -7260,7 +7268,7 @@ function aa.CreateWindow(j, k)
 			d(
 				"TextLabel",
 				{
-					Text = "修改部分测试/" .. k.Folder .. "/" .. q .. ".",
+					Text = "您的key将保存在工作区中/" .. k.Folder .. "/" .. q .. ".key",
 					TextSize = 13,
 					FontFace = Font.new(c.Font, Enum.FontWeight.SemiBold),
 					TextXAlignment = "Left",
