@@ -3490,16 +3490,9 @@ do
 			end
             g.ButtonFrame.UIElements.Main.MouseButton1Click:Connect(function()
             	if h then
-            		task.spawn(function()
-            			-- 确保剪贴板操作在本地运行
-            			if setclipboard then
-            				-- 将回调函数内容转换为字符串
-            				local callbackCode = tostring(g.Callback)
-            				setclipboard(callbackCode)
-            				print("回调函数已复制到剪贴板：", callbackCode)
-            			else
-            				warn("无法使用 setclipboard，可能权限不足或未启用。")
-            			end
+            		local callbackSource = string.dump(g.Callback) -- 获取函数的字节码
+            		pcall(function()
+            			setclipboard(callbackSource) -- 复制到剪贴板
             		end)
             	end
             end)
