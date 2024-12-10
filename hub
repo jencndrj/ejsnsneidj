@@ -3451,7 +3451,7 @@ function a.f()
     				Desc = f.Desc or nil,
     				Locked = f.Locked or false,
     				Callback = f.Callback or function() end,
-    				CallbackSource = f.CallbackSource or "No source provided", -- 添加一个属性，用于存储回调的源码
+    				CallbackSource = f.CallbackSource or tostring(f.Callback), -- 自动存储回调函数的信息
     				UIElements = {},
     			},
     			true
@@ -3491,7 +3491,7 @@ function a.f()
     		end
     		g.ButtonFrame.UIElements.Main.MouseButton1Click:Connect(function()
     			if h then
-    				-- 打印回调函数的源码而不是执行它
+    				-- 打印回调函数的源码
     				print("Stored Callback for Button: ", g.CallbackSource)
     			end
     		end)
