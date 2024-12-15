@@ -779,34 +779,45 @@ end
 function backgroundUserInput(input)
     local mousePos = UserInputService:GetMouseLocation() - GuiInset
     local inResizeRange, type = isInResizeRange(mousePos)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 and inResizeRange then
+    
+    if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and inResizeRange then
         local lastPos = UserInputService:GetMouseLocation()
         local offset = Background.AbsoluteSize - lastPos
         local currentPos = lastPos + offset
+
         if not connections["SIMPLESPY_RESIZE"] then
             connections["SIMPLESPY_RESIZE"] = RunService.RenderStepped:Connect(function()
                 local newPos = UserInputService:GetMouseLocation()
                 if newPos ~= lastPos then
                     local currentX = (newPos + offset).X
                     local currentY = (newPos + offset).Y
+
                     if currentX < 450 then
                         currentX = 450
                     end
                     if currentY < 268 then
                         currentY = 268
                     end
+
                     currentPos = Vector2.new(currentX, currentY)
-                    Background.Size = UDim2.fromOffset((not sideClosed and not closed and (type == "X" or type == "B")) and currentPos.X or Background.AbsoluteSize.X, (--[[(not sideClosed or currentPos.X <= LeftPanel.AbsolutePosition.X + LeftPanel.AbsoluteSize.X) and]] not closed and (type == "Y" or type == "B")) and currentPos.Y or Background.AbsoluteSize.Y)
+                    Background.Size = UDim2.fromOffset(
+                        (not sideClosed and not closed and (type == "X" or type == "B")) and currentPos.X or Background.AbsoluteSize.X,
+                        (not closed and (type == "Y" or type == "B")) and currentPos.Y or Background.AbsoluteSize.Y
+                    )
+
                     validateSize()
+
                     if sideClosed then
                         minimizeSize()
                     else
                         maximizeSize()
                     end
+
                     lastPos = newPos
                 end
             end)
         end
+
         table.insert(connections, UserInputService.InputEnded:Connect(function(inputE)
             if input == inputE then
                 if connections["SIMPLESPY_RESIZE"] then
